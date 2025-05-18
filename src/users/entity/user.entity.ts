@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Doctor } from 'src/doctor/entity/doctor.entity';
 
 export enum Role {
   Admin = 'admin',
@@ -28,4 +29,8 @@ export class User {
   @ApiProperty({ description: 'User role', example: 'admin' })
   @Column({ type: 'enum', enum: Role, default: Role.Patient })
   role: Role;
+
+  @ApiProperty({ description: 'Associated doctor entity' })
+  @OneToOne(() => Doctor, (doctor) => doctor.user)
+  doctor: Doctor;
 }
