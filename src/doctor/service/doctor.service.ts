@@ -52,7 +52,7 @@ export class DoctorService {
     return this.doctorRepository.findOne({ where: { id } });
   }
 
-  async update(id: string, doctorData: Doctor): Promise<Doctor> {
+  async update(id: string, doctorData: Partial<Doctor>): Promise<Doctor> {
     await this.doctorRepository.update(id, doctorData);
     return this.doctorRepository.findOne({ where: { id } });
   }
