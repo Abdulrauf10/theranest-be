@@ -7,11 +7,13 @@ import {
   Post,
   Put,
   Query,
+  Request,
   UseGuards,
   Version,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiOperation,
   ApiQuery,
   ApiTags,
@@ -21,7 +23,7 @@ import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Role } from 'src/users/entity/user.entity';
 import { DoctorService } from '../service/doctor.service';
-import { Doctor } from '../entity/doctor.entity';
+import { DoctorDto } from '../dto/doctor.dto';
 
 @ApiTags('Doctors')
 @ApiBearerAuth()
@@ -34,7 +36,9 @@ export class DoctorController {
   @Post()
   @Version('1')
   @ApiOperation({ summary: 'Create a new doctor' })
-  async create(@Body() doctorData: Partial<Doctor>) {
+  @ApiBody({ type: DoctorDto })
+  async create(@Body() doctorData: Partial<DoctorDto>, @Request() req) {
+    console.log('User:', req.user);
     return this.doctorService.create(doctorData);
   }
 
@@ -66,7 +70,11 @@ export class DoctorController {
   @Put(':id')
   @Version('1')
   @ApiOperation({ summary: 'Update a doctor by id' })
-  async update(@Param('id') id: string, @Body() doctorData: Partial<Doctor>) {
+  @ApiBody({ type: DoctorDto })
+  async update(
+    @Param('id') id: string,
+    @Body() doctorData: Partial<DoctorDto>,
+  ) {
     return this.doctorService.update(id, doctorData);
   }
 

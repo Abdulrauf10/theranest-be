@@ -18,7 +18,16 @@ async function bootstrap() {
     .setTitle('theranest backend')
     .setDescription('api documentation for theranest')
     .setVersion('1.0')
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Enter Access Token',
+        in: 'header',
+      },
+      'jwt',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
