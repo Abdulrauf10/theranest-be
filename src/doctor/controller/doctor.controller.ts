@@ -7,7 +7,6 @@ import {
   Post,
   Put,
   Query,
-  Request,
   UseGuards,
   Version,
 } from '@nestjs/common';
@@ -16,6 +15,7 @@ import {
   ApiBody,
   ApiOperation,
   ApiQuery,
+  ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -25,6 +25,7 @@ import { Role } from 'src/users/entity/user.entity';
 import { DoctorService } from '../service/doctor.service';
 import { DoctorDto } from '../dto/doctor.dto';
 
+@ApiSecurity('jwt')
 @ApiTags('Doctors')
 @ApiBearerAuth()
 @Controller('doctor')
@@ -37,9 +38,20 @@ export class DoctorController {
   @Version('1')
   @ApiOperation({ summary: 'Create a new doctor' })
   @ApiBody({ type: DoctorDto })
-  async create(@Body() doctorData: Partial<DoctorDto>, @Request() req) {
-    console.log('User:', req.user);
-    return this.doctorService.create(doctorData);
+  async create(@Body() doctorData: Partial<DoctorDto>) {
+    try {
+      const createdDoctor = await this.doctorService.create(doctorData);
+      return {
+        message: 'Doctor created successfully',
+        data: createdDoctor,
+      };
+    } catch (error) {
+      return {
+        statusCode: 400,
+        message: error.message || 'An error occurred',
+        error: 'Bad Request',
+      };
+    }
   }
 
   @Get()
@@ -57,7 +69,15 @@ export class DoctorController {
     @Query('day') day?: string,
     @Query('time') time?: string,
   ) {
-    return this.doctorService.findAll(page, limit, name, day, time);
+    try {
+      return this.doctorService.findAll(page, limit, name, day, time);
+    } catch (error) {
+      return {
+        statusCode: 400,
+        message: error.message || 'An error occurred',
+        error: 'Bad Request',
+      };
+    }
   }
 
   @Get(':id')
@@ -75,13 +95,29 @@ export class DoctorController {
     @Param('id') id: string,
     @Body() doctorData: Partial<DoctorDto>,
   ) {
-    return this.doctorService.update(id, doctorData);
+    try {
+      return this.doctorService.update(id, doctorData);
+    } catch (error) {
+      return {
+        statusCode: 400,
+        message: error.message || 'An error occurred',
+        error: 'Bad Request',
+      };
+    }
   }
 
   @Delete(':id')
   @Version('1')
   @ApiOperation({ summary: 'Delete a doctor by id' })
   async remove(@Param('id') id: string) {
-    return this.doctorService.remove(id);
+    try {
+      return this.doctorService.remove(id);
+    } catch (error) {
+      return {
+        statusCode: 400,
+        message: error.message || 'An error occurred',
+        error: 'Bad Request',
+      };
+    }
   }
 }

@@ -28,6 +28,9 @@ export class Doctor {
   @ApiProperty({ description: 'Available day for appointments' })
   day: string;
 
+  @Column({ name: 'user_id', nullable: true })
+  user_id: string;
+
   @Column()
   @ApiProperty({ description: 'Available time for appointments' })
   time: string;
