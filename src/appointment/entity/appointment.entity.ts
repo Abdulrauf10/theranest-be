@@ -39,6 +39,9 @@ export class Appointment {
   @ApiProperty({ description: 'Doctor id' })
   doctor: Doctor;
 
+  @Column({ name: 'doctor_id', nullable: true })
+  doctor_id: string;
+
   @Column({ default: false })
   @ApiProperty({ description: 'Registration confirmation' })
   confirmed: boolean;

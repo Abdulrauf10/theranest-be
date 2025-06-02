@@ -23,7 +23,7 @@ export class DoctorService {
   ): Promise<Doctor[]> {
     const query = this.doctorRepository
       .createQueryBuilder('doctor')
-      .leftJoinAndSelect('doctor.user', 'user'); // Load related user info
+      .leftJoinAndSelect('doctor.user', 'user');
 
     if (name) {
       query.andWhere('LOWER(user.name) LIKE LOWER(:name)', {
@@ -32,17 +32,13 @@ export class DoctorService {
     }
 
     if (day) {
-      query.andWhere(`doctor.availableDays LIKE :day`, { day: `%${day}%` });
+      query.andWhere(`doctor.day = :day`, { day: `%${day}%` });
     }
 
     if (time) {
-      query.andWhere(
-        'doctor.availableFrom <= :time AND doctor.availableTo >= :time',
-        { time },
-      );
+      query.andWhere('doctor.time = :time', { time: `%${time}` });
     }
 
-    // Apply pagination
     query.skip((page - 1) * limit).take(limit);
 
     return query.getMany();
