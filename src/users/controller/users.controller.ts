@@ -11,6 +11,7 @@ import {
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UsersService } from '../service/users.service';
 import { Role } from '../entity/user.entity';
+import { UserDto } from '../dto/user.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -20,7 +21,7 @@ export class UsersController {
   @Post('register')
   @Version('1')
   @ApiOperation({ summary: 'Register a new user' })
-  async register(@Body() userData: any) {
+  async register(@Body() userData: UserDto) {
     return this.usersService.create(userData);
   }
 

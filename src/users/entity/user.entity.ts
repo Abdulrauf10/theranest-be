@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Doctor } from 'src/doctor/entity/doctor.entity';
 
@@ -31,6 +31,6 @@ export class User {
   role: Role;
 
   @ApiProperty({ description: 'Associated doctor entity' })
-  @OneToOne(() => Doctor, (doctor) => doctor.user)
-  doctor: Doctor;
+  @OneToMany(() => Doctor, (doctor) => doctor.user)
+  doctor: Doctor[];
 }

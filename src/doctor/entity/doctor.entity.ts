@@ -5,9 +5,11 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from 'src/users/entity/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Appointment } from 'src/appointment/entity/appointment.entity';
 
 @Entity('doctors')
 export class Doctor {
@@ -20,6 +22,11 @@ export class Doctor {
   @ApiProperty({ description: 'Associated user entity' })
   user: User;
 
+  @OneToMany(() => Appointment, (appointment) => appointment.doctor, {
+    eager: true,
+  })
+  appointments: Appointment[];
+
   @Column()
   @ApiProperty({ description: 'Specialty of the doctor' })
   specialty: string;
@@ -27,6 +34,9 @@ export class Doctor {
   @Column()
   @ApiProperty({ description: 'Available day for appointments' })
   day: string;
+
+  @Column({ name: 'user_id', nullable: true })
+  user_id: string;
 
   @Column()
   @ApiProperty({ description: 'Available time for appointments' })
