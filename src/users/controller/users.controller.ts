@@ -6,14 +6,25 @@ import {
   Param,
   Post,
   Query,
+  UseGuards,
   Version,
 } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UsersService } from '../service/users.service';
 import { Role } from '../entity/user.entity';
 import { UserDto } from '../dto/user.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Users')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
+@ApiSecurity('jwt')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

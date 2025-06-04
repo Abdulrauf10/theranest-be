@@ -35,21 +35,25 @@ export class AppointmentService {
     page: number = 1,
     limit: number = 10,
     name?: string,
-    day?: string,
+    date?: string,
     time?: string,
   ): Promise<Appointment[]> {
     const query = this.appointmentRepository
       .createQueryBuilder('appointment')
-      .leftJoinAndSelect('appointment.doctor', 'doctor');
+      .leftJoinAndSelect('appointment.doctor', 'doctor')
+      .leftJoinAndSelect('doctor.user', 'user');
 
     if (name) {
-      query.andWhere('LOWER(doctor.user.name) LIKE LOWER(:name)', {
-        name: `%${name}%`,
-      });
+      query.andWhere(
+        'LOWER(appointment.patient_name) LIKE LOWER(:patient_name)',
+        {
+          patient_name: `%${name}%`,
+        },
+      );
     }
 
-    if (day) {
-      query.andWhere('appointment.day = :day', { day: `%${day}%` });
+    if (date) {
+      query.andWhere('appointment.date = :date', { day: `%${date}%` });
     }
 
     if (time) {
