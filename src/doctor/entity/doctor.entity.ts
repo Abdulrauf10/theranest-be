@@ -10,6 +10,7 @@ import {
 import { User } from 'src/users/entity/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Appointment } from 'src/appointment/entity/appointment.entity';
+import { UserResponseDto } from 'src/users/dto/user.response.dto';
 
 @Entity('doctors')
 export class Doctor {
@@ -20,11 +21,9 @@ export class Doctor {
   @ManyToOne(() => User, (user) => user.doctor, { eager: true })
   @JoinColumn({ name: 'user_id' })
   @ApiProperty({ description: 'Associated user entity' })
-  user: User;
+  user: UserResponseDto;
 
-  @OneToMany(() => Appointment, (appointment) => appointment.doctor, {
-    eager: true,
-  })
+  @OneToMany(() => Appointment, (appointment) => appointment.doctor)
   appointments: Appointment[];
 
   @Column()
