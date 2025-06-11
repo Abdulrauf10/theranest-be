@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -25,16 +26,16 @@ import { Role } from 'src/users/entity/user.entity';
 import { DoctorService } from '../service/doctor.service';
 import { DoctorDto } from '../dto/doctor.dto';
 
-@ApiSecurity('jwt')
 @ApiTags('Doctors')
-@ApiBearerAuth()
 @Controller('doctor')
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.Admin)
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
 
   @Post()
+  @ApiSecurity('jwt')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Version('1')
   @ApiOperation({ summary: 'Create a new doctor' })
   @ApiBody({ type: DoctorDto })
@@ -46,11 +47,11 @@ export class DoctorController {
         data: createdDoctor,
       };
     } catch (error) {
-      return {
+      throw new BadRequestException({
         statusCode: 400,
         message: error.message || 'An error occurred',
         error: 'Bad Request',
-      };
+      });
     }
   }
 
@@ -72,22 +73,39 @@ export class DoctorController {
     try {
       return this.doctorService.findAll(page, limit, name, day, time);
     } catch (error) {
-      return {
+      throw new BadRequestException({
         statusCode: 400,
         message: error.message || 'An error occurred',
         error: 'Bad Request',
-      };
+      });
     }
   }
 
   @Get(':id')
+  @ApiSecurity('jwt')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Version('1')
   @ApiOperation({ summary: 'Get doctor by id' })
   async findOne(@Param('id') id: string) {
-    return this.doctorService.findOne(id);
+    try {
+      const findDoctor = await this.doctorService.findOne(id);
+      return findDoctor;
+    } catch (error) {
+      throw new BadRequestException({
+        statusCode: 400,
+        message: error.message || 'An error occurred',
+        error: 'Bad Request',
+      });
+    }
   }
 
   @Put(':id')
+  @ApiSecurity('jwt')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Version('1')
   @ApiOperation({ summary: 'Update a doctor by id' })
   @ApiBody({ type: DoctorDto })
@@ -98,26 +116,30 @@ export class DoctorController {
     try {
       return this.doctorService.update(id, doctorData);
     } catch (error) {
-      return {
+      throw new BadRequestException({
         statusCode: 400,
         message: error.message || 'An error occurred',
         error: 'Bad Request',
-      };
+      });
     }
   }
 
   @Delete(':id')
+  @ApiSecurity('jwt')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Version('1')
   @ApiOperation({ summary: 'Delete a doctor by id' })
   async remove(@Param('id') id: string) {
     try {
       return this.doctorService.remove(id);
     } catch (error) {
-      return {
+      throw new BadRequestException({
         statusCode: 400,
         message: error.message || 'An error occurred',
         error: 'Bad Request',
-      };
+      });
     }
   }
 }
