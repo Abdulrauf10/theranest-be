@@ -8,6 +8,7 @@ import {
   ValidationPipe,
   Version,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { AppointmentService } from '../service/appointment.service';
 import { AppointmentDto } from '../dto/appointment.dto';
@@ -24,13 +25,14 @@ export class AppointmentController {
   @ApiBody({ type: AppointmentDto })
   async create(@Body() dto: AppointmentDto): Promise<any> {
     try {
-      return this.appointmentService.create(dto);
+      const appointment = await this.appointmentService.create(dto);
+      return appointment;
     } catch (error) {
-      return {
+      throw new BadRequestException({
         statusCode: 400,
         message: error.message || 'An error occurred',
         error: 'Bad Request',
-      };
+      });
     }
   }
 
@@ -52,11 +54,11 @@ export class AppointmentController {
     try {
       return this.appointmentService.findAll(page, limit, name, date, time);
     } catch (error) {
-      return {
+      throw new BadRequestException({
         statusCode: 400,
         message: error.message || 'An error occurred',
         error: 'Bad Request',
-      };
+      });
     }
   }
 

@@ -14,21 +14,42 @@ export class AppointmentService {
   ) {}
 
   async create(dataAppointment: Partial<Appointment>): Promise<Appointment> {
-    const medicalNumber = generateMedicalNumber();
-    const newAppointment = this.appointmentRepository.create({
-      ...dataAppointment,
-      medicalNumber,
-    });
+    const { doctor_id, date, time } = dataAppointment;
 
-    const saved = this.appointmentRepository.save(newAppointment);
+    return this.appointmentRepository.manager.connection.transaction(
+      async (manager) => {
+        // Pessimistic write lock inside transaction
+        const existing = await manager
+          .createQueryBuilder(Appointment, 'appointment')
+          .setLock('pessimistic_write')
+          .where('appointment.doctor_id = :doctor_id', { doctor_id })
+          .andWhere('appointment.date = :date', { date })
+          .andWhere('appointment.time = :time', { time })
+          .getOne();
 
-    this.emailService.sendConfirmation(
-      dataAppointment.email,
-      medicalNumber,
-      dataAppointment.date,
-      dataAppointment.time,
+        if (existing) {
+          throw new Error('This time slot is already booked');
+        }
+
+        const medicalNumber = generateMedicalNumber();
+        const newAppointment = this.appointmentRepository.create({
+          ...dataAppointment,
+          medicalNumber,
+        });
+
+        const saved = await manager.save(newAppointment);
+
+        // Send confirmation after saving
+        this.emailService.sendConfirmation(
+          dataAppointment.email,
+          medicalNumber,
+          dataAppointment.date,
+          dataAppointment.time,
+        );
+
+        return saved;
+      },
     );
-    return saved;
   }
 
   async findAll(
