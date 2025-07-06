@@ -1,6 +1,6 @@
 # 🧠 TheraNest Backend — API for Online Psychological Consultation Platform
 
-Welcome to the backend of TheraNest, a modern online consultation platform built to connect users with professional psychologists—safely, efficiently, and comfortably from home.
+Welcome to the backend of Trivanest, a modern online consultation platform built to connect users with professional psychologists—safely, efficiently, and comfortably from home.
 
 “Mental wellness deserves convenience, security, and empathy — TheraNest delivers that with thoughtful tech.”
 
