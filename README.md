@@ -1,8 +1,8 @@
-# 🧠 Trivanest Backend — API for Online Psychological Consultation Platform
+# 🧠 Trivanest Frontend — Web App for Online Psychological Consultation Platform
 
-Welcome to the backend of Trivanest, a modern online consultation platform built to connect users with professional psychologists—safely, efficiently, and comfortably from home.
+Welcome to the frontend of Trivanest, a modern online consultation platform built to connect users with professional psychologists—safely, efficiently, and comfortably from home.
 
-“Mental wellness deserves convenience, security, and empathy — TheraNest delivers that with thoughtful tech.”
+“Mental wellness deserves convenience, security, and empathy — Trivanest delivers that with thoughtful tech.”
 
 ## 💭 Problem Statement
 
@@ -10,7 +10,7 @@ How might we create an online experience where individuals can easily schedule, 
 
 ## 🎯 Solution Overview
 
-TheraNest was developed to simplify mental health access by solving key issues:
+Trivanest was developed to simplify mental health access by solving key issues:
 
 Long wait times for appointments
 
@@ -50,13 +50,3 @@ Structured with RESTful APIs to support frontend integrations.
 ### Install dependencies
 
 npm install
-
-### Set environment variables
-
-.env
-
-### Add DB connection, email credentials, etc.
-
-### Run in development
-
-nest start --watch
