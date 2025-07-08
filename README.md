@@ -1,6 +1,6 @@
-# 🧠 Trivanest Frontend — Web App for Online Psychological Consultation Platform
+# 🧠 Trivanest Backend — Web App for Online Psychological Consultation Platform
 
-Welcome to the frontend of Trivanest, a modern online consultation platform built to connect users with professional psychologists—safely, efficiently, and comfortably from home.
+Welcome to the backend of Trivanest, a modern online consultation platform built to connect users with professional psychologists—safely, efficiently, and comfortably from home.
 
 “Mental wellness deserves convenience, security, and empathy — Trivanest delivers that with thoughtful tech.”
 
